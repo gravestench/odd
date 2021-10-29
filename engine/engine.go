@@ -3,33 +3,27 @@ package engine
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gravestench/odd/engine/scenes/terminal"
+	"github.com/gravestench/odd/engine/systems/network/client"
+	"github.com/gravestench/odd/engine/systems/network/server"
+	"github.com/gravestench/odd/engine/systems/shell"
 	"os"
 	"path"
 
-	"github.com/gravestench/odd/engine/scenes/odd_error"
-	"github.com/gravestench/odd/engine/scenes/splash"
-
+	"github.com/gravestench/director"
 	"github.com/kirsle/configdir"
-
-	director "github.com/gravestench/director/pkg"
 
 	"github.com/gravestench/odd/engine/mpq_loader"
 	"github.com/gravestench/odd/engine/settings"
+
+	"github.com/gravestench/odd/engine/scenes/odd_error"
+	"github.com/gravestench/odd/engine/scenes/splash"
+	"github.com/gravestench/odd/engine/scenes/terminal"
 )
 
 const (
 	oddAppName     = "odd"
 	oddAppSettings = "settings.json"
 	oddWindowTitle = "ODD Engine"
-)
-
-type Mode int
-
-const (
-	Client Mode = iota
-	Host
-	Server
 )
 
 // New creates a new engine instance
@@ -56,10 +50,15 @@ func New() *Engine {
 		return e
 	}
 
-	e.initEngineSystems()
+	e.initEngineSystems() // we always init all systems
 
-	if e.Mode != Server {
+	switch e.Mode {
+	case ModeClient, ModeHost:
+		// client and host are graphical, so need the graphical scenes
 		e.initEngineScenes()
+	case ModeServer:
+		// the dedicated server only needs the non-graphical systems
+		// nothing else to do here
 	}
 
 	return e
@@ -119,59 +118,14 @@ func (e *Engine) initLoaders() error {
 }
 
 func (e *Engine) initEngineSystems() {
-	//e.AddSystem(&ai.System{}) // TODO
-	//e.AddSystem(&ai.System{}) // TODO
-	//e.AddSystem(&combat_evaluation.System{}) // TODO
-	//e.AddSystem(&item_craft.System{}) // TODO
-	//e.AddSystem(&damage_calculation.System{}) // TODO
-	//e.AddSystem(&entity_control.System{}) // TODO
-	//e.AddSystem(&merchant_items.System{}) // TODO
-	//e.AddSystem(&health_modifier_queue.System{}) // TODO
-	//e.AddSystem(&merchant_mercenaries.System{}) // TODO
-	//e.AddSystem(&client.System{}) // TODO
-	//e.AddSystem(&server.System{}) // TODO
-	//e.AddSystem(&player_party.System{}) // TODO
-	//e.AddSystem(&player_quest.System{}) // TODO
-	//e.AddSystem(&realm.System{}) // TODO
-	//e.AddSystem(&shell.System{}) // TODO
-	//e.AddSystem(&player_skills.System{}) // TODO
-	//e.AddSystem(&item_socket.System{}) // TODO
-	//e.AddSystem(&item_treasure.System{}) // TODO
+	e.AddSystem(&shell.System{}, true)
+	e.AddSystem(&client.System{}, true)
+	e.AddSystem(&server.System{}, true)
 }
 
 func (e *Engine) initEngineScenes() {
 	e.AddScene(&splash.Scene{})
 	e.AddScene(&terminal.Scene{})
-	//e.AddScene(&game_ui_chat.Scene{}) // TODO
-	//e.AddScene(&game_ui_cube.Scene{}) // TODO
-	//e.AddScene(&game_ui_escape_menu.Scene{}) // TODO
-	//e.AddScene(&game_ui_help.Scene{}) // TODO
-	//e.AddScene(&game_ui_hud.Scene{}) // TODO
-	//e.AddScene(&game_ui_inventory.Scene{}) // TODO
-	//e.AddScene(&game_ui_map.Scene{}) // TODO
-	//e.AddScene(&game_ui_mercenary.Scene{}) // TODO
-	//e.AddScene(&game_ui_options_config.Scene{}) // TODO
-	//e.AddScene(&game_ui_party.Scene{}) // TODO
-	//e.AddScene(&game_ui_quest.Scene{}) // TODO
-	//e.AddScene(&game_ui_skills.Scene{}) // TODO
-	//e.AddScene(&game_ui_stash.Scene{}) // TODO
-	//e.AddScene(&game_ui_stats.Scene{}) // TODO
-	//e.AddScene(&game_ui_tooltip.Scene{}) // TODO
-	//e.AddScene(&game_ui_trade_mercenary.Scene{}) // TODO
-	//e.AddScene(&game_ui_trade_merchant.Scene{}) // TODO
-	//e.AddScene(&game_ui_trade_player.Scene{}) // TODO
-	//e.AddScene(&game_weather.Scene{}) // TODO
-	//e.AddScene(&game_world.Scene{}) // TODO
-	//e.AddScene(&loading.Scene{}) // TODO
-	//e.AddScene(&menu_character_create.Scene{}) // TODO
-	//e.AddScene(&menu_character_load.Scene{}) // TODO
-	//e.AddScene(&menu_cinematics.Scene{}) // TODO
-	//e.AddScene(&menu_credits.Scene{}) // TODO
-	//e.AddScene(&menu_end_game.Scene{}) // TODO
-	//e.AddScene(&menu_main.Scene{}) // TODO
-	//e.AddScene(&menu_realm_browser.Scene{}) // TODO
-	//e.AddScene(&menu_realm_host.Scene{}) // TODO
-	//e.AddScene(&menu_realm_join.Scene{}) // TODO
 }
 
 func (e *Engine) initSettingsFile(s *settings.Settings, settingsPath string) error {

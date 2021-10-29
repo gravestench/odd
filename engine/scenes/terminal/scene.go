@@ -119,9 +119,9 @@ func (scene *Scene) setupTweens() {
 
 	scene.tween.show.
 		Time(duration).
-		Ease(easing.Sine).
+		Ease(easing.SineOut).
 		OnStart(func() {
-			scene.Sys.Tweens.Remove(scene.tween.hide)
+			scene.tween.hide.Stop()
 		}).
 		OnUpdate(func(progress float64) {
 			alpha.Value = progress
@@ -129,14 +129,14 @@ func (scene *Scene) setupTweens() {
 		}).
 		OnComplete(func() {
 			hideFrom = origin.Y
-			scene.Sys.Tweens.Remove(scene.tween.show)
-		})
+		}).
+		Stop()
 
 	scene.tween.hide.
 		Time(duration).
-		Ease(easing.Sine).
+		Ease(easing.SineOut).
 		OnStart(func() {
-			scene.Sys.Tweens.Remove(scene.tween.show)
+			scene.tween.show.Stop()
 		}).
 		OnUpdate(func(progress float64) {
 			alpha.Value = 1 - progress
@@ -144,8 +144,11 @@ func (scene *Scene) setupTweens() {
 		}).
 		OnComplete(func() {
 			showFrom = origin.Y
-			scene.Sys.Tweens.Remove(scene.tween.hide)
-		})
+		}).
+		Stop()
+
+	scene.Sys.Tweens.Add(scene.tween.show)
+	scene.Sys.Tweens.Add(scene.tween.hide)
 }
 
 func (scene *Scene) bindOpenClose() {
@@ -157,11 +160,11 @@ func (scene *Scene) bindOpenClose() {
 		scene.isVisible = !scene.isVisible
 
 		if scene.isVisible {
-			scene.Sys.Tweens.Add(scene.tween.show.Start())
-			scene.Sys.Tweens.Add(scene.tween.hide.Stop())
+			scene.tween.hide.Stop()
+			scene.tween.show.Start()
 		} else {
-			scene.Sys.Tweens.Add(scene.tween.hide.Start())
-			scene.Sys.Tweens.Add(scene.tween.show.Stop())
+			scene.tween.hide.Start()
+			scene.tween.show.Stop()
 		}
 
 		return !scene.isVisible

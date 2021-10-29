@@ -24,17 +24,18 @@ type SceneExtension struct {
 	}
 }
 
-func (odd *SceneExtension) NewEntity() common.Entity {
-	return odd.Scene.Director.NewEntity()
+func (s *SceneExtension) NewEntity() common.Entity {
+	return s.Scene.Director.NewEntity()
 }
 
-func (odd *SceneExtension) Init(_ *akara.World) {
-	odd.Components.BasicComponents = &odd.Scene.Components
-	odd.Sys.DirectorSystems = &odd.Scene.Director.Sys
-	odd.Add.ObjectFactory = &odd.Scene.Add
+func (s *SceneExtension) Init(_ *akara.World) {
+	s.Components.BasicComponents = &s.Scene.Components
+	s.Sys.DirectorSystems = &s.Scene.Director.Sys
+	s.Add.ObjectFactory = &s.Scene.Add
+	s.SetTickFrequency(60)
 }
 
-func (odd *SceneExtension) IsInitialized() bool {
+func (s *SceneExtension) IsInitialized() bool {
 	panic("implement me")
 }
 

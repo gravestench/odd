@@ -12,6 +12,7 @@ import (
 
 type Scene struct {
 	common.SceneExtension
+	updates int
 }
 
 func (scene *Scene) Key() string {
@@ -19,11 +20,19 @@ func (scene *Scene) Key() string {
 }
 
 func (scene *Scene) Update() {
- // noop
+	scene.initLogicWorkaround() // at time of writing, viewport is not yet init when scene.Init is called
 }
 
 func (scene *Scene) Init(w *akara.World) {
 	scene.SceneExtension.Init(w)
+}
+
+func (scene *Scene) initLogicWorkaround() {
+	scene.updates++
+
+	if scene.updates > 1 {
+		return
+	}
 
 	scene.makeShapes()
 	scene.fadeInOut()
@@ -87,26 +96,14 @@ func (scene *Scene) fadeInOut() {
 		Delay(delay).
 		Time(duration).
 		OnStart(func(){
-			if scene.Viewports == nil {
-				return
-			}
-
 			opacity, _ := scene.Components.Opacity.Get(scene.Viewports[0])
 			opacity.Value = 0
 		}).
 		OnUpdate(func(progress float64){
-			if scene.Viewports == nil {
-				return
-			}
-
 			opacity, _ := scene.Components.Opacity.Get(scene.Viewports[0])
 			opacity.Value = progress
 		}).
 		OnComplete(func(){
-			if scene.Viewports == nil {
-				return
-			}
-
 			opacity, _ := scene.Components.Opacity.Get(scene.Viewports[0])
 			opacity.Value = 1
 			scene.Sys.Tweens.Remove(t1)
