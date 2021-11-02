@@ -1,9 +1,11 @@
 package odd_error
 
 import (
-	"github.com/gravestench/akara"
-	"github.com/gravestench/director/pkg/systems/scene"
 	"image/color"
+
+	"github.com/gravestench/director"
+
+	"github.com/gravestench/akara"
 )
 
 // TODO
@@ -17,7 +19,7 @@ func New(message string) *Scene {
 }
 
 type Scene struct {
-	scene.Scene
+	director.Scene
 	message string
 }
 
