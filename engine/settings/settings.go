@@ -3,7 +3,7 @@ package settings
 type Settings struct {
 	Archives Archives
 	Renderer Renderer
-	Keys Keys
+	Keys     Keys
 }
 
 func (s *Settings) Init() {

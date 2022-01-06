@@ -3,11 +3,12 @@ package engine
 import (
 	"encoding/json"
 	"fmt"
+	"os"
+	"path"
+
 	"github.com/gravestench/odd/engine/systems/network/client"
 	"github.com/gravestench/odd/engine/systems/network/server"
 	"github.com/gravestench/odd/engine/systems/shell"
-	"os"
-	"path"
 
 	"github.com/gravestench/director"
 	"github.com/kirsle/configdir"

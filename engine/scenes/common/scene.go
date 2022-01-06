@@ -37,4 +37,3 @@ func (s *SceneExtension) Init(_ *akara.World) {
 func (s *SceneExtension) IsInitialized() bool {
 	panic("implement me")
 }
-
