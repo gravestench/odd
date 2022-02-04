@@ -49,4 +49,3 @@ func (scene *Scene) Init(_ *akara.World) {
 func (scene *Scene) IsInitialized() bool {
 	return true
 }
-

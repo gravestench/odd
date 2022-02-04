@@ -67,7 +67,6 @@ func (scene *Scene) makeShapes() {
 			continue
 		}
 
-
 		circleRenderOrder.Value = layer - 2
 
 		r := scene.Add.Rectangle(x, y, cw, cw*2, white, nil)
@@ -95,15 +94,15 @@ func (scene *Scene) fadeInOut() {
 	t1.
 		Delay(delay).
 		Time(duration).
-		OnStart(func(){
+		OnStart(func() {
 			opacity, _ := scene.Components.Opacity.Get(scene.Viewports[0])
 			opacity.Value = 0
 		}).
-		OnUpdate(func(progress float64){
+		OnUpdate(func(progress float64) {
 			opacity, _ := scene.Components.Opacity.Get(scene.Viewports[0])
 			opacity.Value = progress
 		}).
-		OnComplete(func(){
+		OnComplete(func() {
 			opacity, _ := scene.Components.Opacity.Get(scene.Viewports[0])
 			opacity.Value = 1
 			scene.Sys.Tweens.Remove(t1)
@@ -112,15 +111,15 @@ func (scene *Scene) fadeInOut() {
 
 	t2.
 		Time(duration).
-		OnStart(func(){
+		OnStart(func() {
 			opacity, _ := scene.Components.Opacity.Get(scene.Viewports[0])
 			opacity.Value = 1
 		}).
-		OnUpdate(func(progress float64){
+		OnUpdate(func(progress float64) {
 			opacity, _ := scene.Components.Opacity.Get(scene.Viewports[0])
 			opacity.Value = 1 - progress
 		}).
-		OnComplete(func(){
+		OnComplete(func() {
 			opacity, _ := scene.Components.Opacity.Get(scene.Viewports[0])
 			opacity.Value = 0
 			scene.Sys.Tweens.Remove(t2)

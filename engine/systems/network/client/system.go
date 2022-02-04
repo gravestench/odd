@@ -19,4 +19,3 @@ func (sys *System) Init(_ *akara.World) {
 func (sys *System) IsInitialized() bool {
 	return true
 }
-

@@ -3,11 +3,12 @@ package engine
 import (
 	"encoding/json"
 	"fmt"
+	"os"
+	"path"
+
 	"github.com/gravestench/odd/engine/systems/network/client"
 	"github.com/gravestench/odd/engine/systems/network/server"
 	"github.com/gravestench/odd/engine/systems/shell"
-	"os"
-	"path"
 
 	"github.com/gravestench/director"
 	"github.com/kirsle/configdir"
@@ -36,7 +37,7 @@ func New() *Engine {
 
 	err := e.initSettings()
 	if err != nil {
-		errMsg := fmt.Sprintf("could not initialize configuration: %w", err)
+		errMsg := fmt.Errorf("could not initialize configuration: %w", err)
 		e.showErrorScene(errMsg)
 
 		return e
@@ -44,7 +45,7 @@ func New() *Engine {
 
 	err = e.initLoaders()
 	if err != nil {
-		errMsg := fmt.Sprintf("could not initialize loaders: %w", err)
+		errMsg := fmt.Errorf("could not initialize loaders: %w", err)
 		e.showErrorScene(errMsg)
 
 		return e
@@ -147,7 +148,7 @@ func (e *Engine) initSettingsFile(s *settings.Settings, settingsPath string) err
 	return nil
 }
 
-func (e *Engine) showErrorScene(errMsg string) {
+func (e *Engine) showErrorScene(errMsg error) {
 	e.Sys.Renderer.Window.Width, e.Sys.Renderer.Window.Height = 600, 300
-	e.AddScene(odd_error.New(errMsg))
+	e.AddScene(odd_error.New(errMsg.Error()))
 }

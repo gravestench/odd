@@ -30,7 +30,7 @@ func (m *MpqLoader) Load(path string) (io.ReadSeeker, error) {
 	path = strings.ReplaceAll(path, "/", "\\")
 
 	if !m.Exists(path) {
-		return nil, fmt.Errorf("could not locate file \"%s\" in \"%s\"", path, m.mpq.Path())
+		return nil, fmt.Errorf("could not locate file %q in %q", path, m.mpq.Path())
 	}
 
 	return m.mpq.ReadFileStream(path)

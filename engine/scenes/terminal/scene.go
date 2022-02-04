@@ -1,13 +1,14 @@
 package terminal
 
 import (
+	"image/color"
+	"strings"
+	"time"
+
 	rl "github.com/gen2brain/raylib-go/raylib"
 	"github.com/gravestench/akara"
 	"github.com/gravestench/director/pkg/easing"
 	"github.com/gravestench/director/pkg/systems/tween"
-	"image/color"
-	"strings"
-	"time"
 
 	"github.com/gravestench/director/pkg/systems/input"
 	"github.com/gravestench/odd/engine/scenes/common"
@@ -22,15 +23,15 @@ type Scene struct {
 	common.SceneExtension
 
 	window akara.EID
-	text akara.EID
+	text   akara.EID
 
 	input struct {
-		index int
+		index  int
 		buffer []string
 	}
 
 	output struct {
-		index int
+		index  int
 		buffer []string
 	}
 
@@ -80,7 +81,7 @@ func (scene *Scene) makeWindow() {
 	}
 
 	scene.window = scene.Add.Rectangle(0, wh, ww, wh, gray, nil)
-	scene.text = scene.Add.Label("", 200, 200, wh/20, "", color.RGBA{R:222, G:222, B:222, A:255})
+	scene.text = scene.Add.Label("", 200, 200, wh/20, "", color.RGBA{R: 222, G: 222, B: 222, A: 255})
 
 	wNode, wFound := scene.Components.SceneGraphNode.Get(scene.window)
 	tNode, tFound := scene.Components.SceneGraphNode.Get(scene.text)
